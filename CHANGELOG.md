@@ -14,3 +14,5 @@ All notable changes to this project are documented here.
 
 - **2026-05-16**: docs: clarify setup steps and environment configuration in README
 
+- **2026-05-19**: chore: update dependencies and ignore unnecessary cache artifacts
+

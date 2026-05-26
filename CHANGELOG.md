@@ -16,3 +16,5 @@ All notable changes to this project are documented here.
 
 - **2026-05-19**: chore: update dependencies and ignore unnecessary cache artifacts
 
+- **2026-05-26**: feat: initial project setup and core architecture scaffolding
+

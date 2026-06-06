@@ -20,3 +20,5 @@ All notable changes to this project are documented here.
 
 - **2026-06-01**: feat: add structured logging for debugging and runtime diagnostics
 
+- **2026-06-06**: style: format code according to style conventions and lint rules
+

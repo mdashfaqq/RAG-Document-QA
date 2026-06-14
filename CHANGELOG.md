@@ -22,3 +22,5 @@ All notable changes to this project are documented here.
 
 - **2026-06-06**: style: format code according to style conventions and lint rules
 
+- **2026-06-14**: fix: handle null values and prevent potential boundary errors
+

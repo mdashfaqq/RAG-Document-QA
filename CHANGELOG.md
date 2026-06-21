@@ -26,3 +26,5 @@ All notable changes to this project are documented here.
 
 - **2026-06-17**: perf: improve response latency and optimize inner execution loops
 
+- **2026-06-21**: test: expand test coverage for error responses and status codes
+

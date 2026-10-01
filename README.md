@@ -12,6 +12,10 @@ pinned: false
 
 # RAG Document Q&A
 
+[![Live demo on Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Live%20demo-Hugging%20Face%20Spaces-blue)](https://mdashfaqq-rag-qa.hf.space)
+
+**Live demo:** https://mdashfaqq-rag-qa.hf.space
+
 Ask natural-language questions over your own PDF documents. The app uses **retrieval-augmented generation (RAG)**: documents are split into chunks, embedded with a sentence-transformer model, and stored in a FAISS vector index. Each question retrieves the most relevant chunks, and an answer is generated from them with source citations.
 
 ## Features

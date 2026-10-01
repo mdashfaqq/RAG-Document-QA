@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document Q&amp;A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f7fb; --panel: #ffffff; --text: #0f172a; --muted: #64748b; --border: #e2e8f0;
+  --soft: #f1f5f9; --accent: #4f46e5; --accent2: #7c3aed; --danger: #dc2626; --ok: #059669;
+  --shadow: 0 1px 3px rgba(15,23,42,.06), 0 10px 30px rgba(15,23,42,.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1020; --panel: #121a2e; --text: #e2e8f0; --muted: #94a3b8; --border: #23304a;
+    --soft: #18223a; --shadow: 0 1px 3px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.25);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 16px 40px; }
+
+.hero {
+  padding: 34px 32px; border-radius: 20px; color: #fff; margin-bottom: 22px;
+  background: radial-gradient(circle at 15% 20%, rgba(255,255,255,.18), transparent 40%),
+              linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #a21caf 100%);
+  box-shadow: 0 20px 45px -20px rgba(79,70,229,.65);
+}
+.hero h1 { margin: 0 0 8px; font-size: 2rem; letter-spacing: -.02em; }
+.hero p { margin: 0; opacity: .9; max-width: 640px; line-height: 1.5; }
+.pills { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font-size: .78rem; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25); }
+
+.grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; }
+.card h2 { margin: 0 0 4px; font-size: 1.05rem; }
+.sub { color: var(--muted); font-size: .88rem; margin: 0 0 14px; }
+
+.drop {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+  padding: 26px 14px; border: 2px dashed var(--border); border-radius: 14px; cursor: pointer;
+  background: var(--soft); transition: border-color .15s, background .15s;
+}
+.drop:hover, .drop.over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--soft)); }
+.drop .icon { font-size: 1.8rem; }
+.drop b { font-size: .95rem; }
+.drop small { color: var(--muted); }
+.drop input { display: none; }
+
+.docs { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.doc { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); font-size: .9rem; }
+.doc .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc .meta { color: var(--muted); font-size: .8rem; white-space: nowrap; }
+.doc.err { border-color: color-mix(in srgb, var(--danger) 50%, var(--border)); color: var(--danger); }
+.doc.err .meta { color: var(--danger); }
+.empty { color: var(--muted); font-size: .9rem; padding: 4px 2px; }
+
+.chat { display: flex; flex-direction: column; min-height: 560px; padding: 0; overflow: hidden; }
+.messages { flex: 1; padding: 22px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; max-height: 62vh; }
+.placeholder { margin: auto; text-align: center; color: var(--muted); max-width: 380px; }
+.placeholder h3 { color: var(--text); margin: 0 0 6px; }
+.msg { max-width: 85%; line-height: 1.55; font-size: .95rem; }
+.msg.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; padding: 10px 14px; border-radius: 16px 16px 4px 16px; }
+.msg.bot { align-self: flex-start; background: var(--soft); border: 1px solid var(--border); padding: 12px 16px; border-radius: 16px 16px 16px 4px; }
+.msg.bot.error { color: var(--danger); }
+.msg .cite { display: inline-block; font-size: .72rem; font-weight: 600; padding: 0 6px; border-radius: 6px; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+details.sources { margin-top: 10px; font-size: .85rem; }
+details.sources summary { cursor: pointer; color: var(--muted); font-weight: 500; }
+.src { margin-top: 8px; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--panel); border-radius: 8px; }
+.src .head { font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; gap: 8px; }
+.src .score { color: var(--muted); font-weight: 500; }
+.src .text { color: var(--muted); }
+.typing span { display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25 } 40% { opacity: 1 } }
+
+.composer { border-top: 1px solid var(--border); padding: 14px; }
+.examples { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.chip { font: inherit; font-size: .8rem; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--panel); color: var(--text); cursor: pointer; }
+.chip:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.row { display: flex; gap: 10px; }
+.row input { flex: 1; font: inherit; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--panel); color: var(--text); outline: none; }
+.row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+.btn { font: inherit; font-weight: 600; padding: 0 20px; border: 0; border-radius: 12px; color: #fff; cursor: pointer; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+.btn:disabled, .chip:disabled, .row input:disabled { opacity: .5; cursor: not-allowed; }
+.spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg) } }
+.foot { text-align: center; color: var(--muted); font-size: .8rem; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>📄 Document Q&amp;A</h1>
+    <p>Upload your PDFs and ask questions in plain English. Every answer is grounded in your documents and cites the exact page it came from.</p>
+    <div class="pills">
+      <span class="pill">🔎 Semantic search · FAISS</span>
+      <span class="pill">🧠 MiniLM embeddings</span>
+      <span class="pill">📌 Page-level citations</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Your library</h2>
+      <p class="sub">PDFs with selectable text work best. Files upload as soon as you pick them.</p>
+      <label class="drop" id="drop">
+        <span class="icon">⬆️</span>
+        <b>Drop PDFs here or click to browse</b>
+        <small>Multiple files supported</small>
+        <input type="file" id="file" accept=".pdf" multiple>
+      </label>
+      <div class="docs" id="docs"><div class="empty">No documents yet.</div></div>
+    </section>
+
+    <section class="card chat">
+      <div class="messages" id="messages">
+        <div class="placeholder" id="placeholder">
+          <h3>Ask anything about your documents</h3>
+          Upload a PDF on the left, then ask a question. Answers include the source page so you can check them.
+        </div>
+      </div>
+      <form class="composer" id="form">
+        <div class="examples">
+          <button type="button" class="chip">Summarize this document</button>
+          <button type="button" class="chip">What are the key skills or methods?</button>
+          <button type="button" class="chip">What are the main conclusions?</button>
+        </div>
+        <div class="row">
+          <input id="q" placeholder="Upload a PDF to start asking…" autocomplete="off" disabled>
+          <button class="btn" id="ask" disabled>Ask</button>
+        </div>
+      </form>
+    </section>
+  </div>
+  <p class="foot">Built with FastAPI, sentence-transformers and FAISS</p>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const detail = (j) => Array.isArray(j.detail) ? j.detail.map((d) => d.msg).join("; ") : (j.detail || "Something went wrong");
+let busy = false;
+
+function setReady(ready) {
+  const on = ready && !busy;
+  $("q").disabled = !ready;
+  $("ask").disabled = !on;
+  document.querySelectorAll(".chip").forEach((c) => (c.disabled = !on));
+  $("q").placeholder = ready ? "Ask a question about your documents…" : "Upload a PDF to start asking…";
+}
+
+async function refreshDocs() {
+  const docs = await (await fetch("/documents")).json();
+  const list = $("docs");
+  list.querySelectorAll(".doc:not(.pending):not(.err)").forEach((n) => n.remove());
+  list.querySelector(".empty")?.remove();
+  docs.forEach((d) => list.insertAdjacentHTML("beforeend",
+    `<div class="doc"><span>📄</span><span class="name" title="${esc(d.document)}">${esc(d.document)}</span><span class="meta">${d.chunks} chunks</span></div>`));
+  if (!list.children.length) list.innerHTML = '<div class="empty">No documents yet.</div>';
+  setReady(docs.length > 0);
+}
+
+async function upload(files) {
+  for (const f of files) {
+    $("docs").querySelector(".empty")?.remove();
+    const row = document.createElement("div");
+    row.className = "doc pending";
+    row.innerHTML = `<span class="spinner"></span><span class="name">${esc(f.name)}</span><span class="meta">Indexing…</span>`;
+    $("docs").prepend(row);
+    const body = new FormData();
+    body.append("file", f);
+    try {
+      const r = await fetch("/upload", { method: "POST", body });
+      const j = await r.json();
+      if (!r.ok) throw new Error(detail(j));
+      row.remove();
+    } catch (e) {
+      row.className = "doc err";
+      row.innerHTML = `<span>⚠️</span><span class="name">${esc(f.name)}</span><span class="meta">${esc(e.message)}</span>`;
+    }
+  }
+  await refreshDocs();
+}
+
+function addMsg(cls, html) {
+  $("placeholder")?.remove();
+  const m = document.createElement("div");
+  m.className = "msg " + cls;
+  m.innerHTML = html;
+  $("messages").append(m);
+  $("messages").scrollTop = $("messages").scrollHeight;
+  return m;
+}
+
+async function ask(question) {
+  question = question.trim();
+  if (busy || !question) return;
+  if (question.length < 3) { addMsg("bot error", "Please ask a slightly longer question."); return; }
+  busy = true; setReady(true);
+  $("q").value = "";
+  addMsg("user", esc(question));
+  const bot = addMsg("bot", '<span class="typing"><span></span><span></span><span></span></span>');
+  try {
+    const r = await fetch("/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(detail(j));
+    const answer = esc(j.answer).replace(/\n/g, "<br>").replace(/\[(\d+)\]/g, '<span class="cite">$1</span>');
+    const sources = j.sources.map((s) => `<div class="src"><div class="head"><span>[${s.id}] ${esc(s.source)} · page ${s.page}</span><span class="score">${s.score.toFixed(2)}</span></div><div class="text">${esc(s.text)}…</div></div>`).join("");
+    bot.innerHTML = `${answer}<details class="sources"><summary>📚 ${j.sources.length} sources</summary>${sources}</details>`;
+  } catch (e) {
+    bot.classList.add("error");
+    bot.textContent = e.message;
+  } finally {
+    busy = false; setReady(true);
+    $("messages").scrollTop = $("messages").scrollHeight;
+    $("q").focus();
+  }
+}
+
+$("file").addEventListener("change", (e) => { upload([...e.target.files]); e.target.value = ""; });
+const drop = $("drop");
+["dragover", "dragenter"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach((t) => drop.addEventListener(t, () => drop.classList.remove("over")));
+drop.addEventListener("drop", (e) => { e.preventDefault(); upload([...e.dataTransfer.files].filter((f) => f.name.toLowerCase().endsWith(".pdf"))); });
+$("form").addEventListener("submit", (e) => { e.preventDefault(); ask($("q").value); });
+document.querySelectorAll(".chip").forEach((c) => c.addEventListener("click", () => ask(c.textContent)));
+refreshDocs();
+</script>
+</body>
+</html>

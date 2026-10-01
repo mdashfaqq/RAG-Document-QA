@@ -6,3 +6,5 @@ sentence-transformers>=2.7
 faiss-cpu>=1.8
 numpy>=1.26
 anthropic>=0.40
+huggingface_hub>=0.30
+python-dotenv>=1.0
